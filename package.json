@@ -1,0 +1,19 @@
+{
+  "name": "food-explorer-api",
+  "version": "1.0.0",
+  "description": "API Backend Foodexplorer",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "dev": "nodemon ./src/server.js"
+  },
+  "author": "Felipe Santos",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "express-async-errors": "^3.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

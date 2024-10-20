@@ -27,6 +27,37 @@ class DishesControler {
 
         return response.status(201).json({ message: "Prato criado com sucesso!" });
     }
+
+    async show(request, response) {
+        const { id } = request.params;
+
+        const dish = await knex("dishes").where({ id }).first();
+
+        const ingredients = await knex("ingredients").where({ dish_id: id }).orderBy("name");
+
+        return response.json({
+            ...dish,
+            ingredients
+        });
+    }
+
+    async delete(request, response) {
+        const { id } = request.params;
+
+        await knex("dishes").where({ id }).delete();
+
+        return response.json({ message: "Prato excluído com sucesso!" })
+    }
+
+    async index(request, response) {
+        const { user_id } = request.query;
+
+        const dishes = await knex("dishes")
+            .where({ user_id })
+            .orderBy("name");
+
+        return response.json({ dishes });
+    }
 }
 
 module.exports = DishesControler;

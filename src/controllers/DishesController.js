@@ -11,6 +11,8 @@ class DishesControler {
             price,
             category,
             user_id,
+            created_at: knex.raw("DATETIME('now', '-3 hours')"),
+            updated_at: knex.raw("DATETIME('now', '-3 hours')")
         });
 
         const ingredientsInsert = ingredients.map(name => {

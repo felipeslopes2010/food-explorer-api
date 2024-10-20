@@ -1,5 +1,6 @@
 exports.up = knex => knex.schema.createTable("dishes", table => {
     table.increments("id");
+    table.integer("user_id").references("id").inTable("users");
     table.text("name");
     table.text("description");
     table.decimal("price", 3, 2);

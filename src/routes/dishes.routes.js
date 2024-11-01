@@ -1,6 +1,6 @@
 const { Router } = require("express");
-const ensureAuthenticated = require("../middleware/ensureAuthenticated");
 const DishesController = require("../controllers/DishesController");
+const ensureAuthenticated = require("../middleware/ensureAuthenticated");
 
 const dishesRoutes = Router();
 

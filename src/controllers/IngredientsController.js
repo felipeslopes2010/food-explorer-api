@@ -5,7 +5,8 @@ class IngredientsController {
         const user_id = request.user.id;
 
         const ingredients = await knex("ingredients")
-            .where({ user_id });
+            .where({ user_id })
+            .groupBy("name");
 
         return response.json(ingredients);
     }

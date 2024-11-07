@@ -68,16 +68,14 @@ class DishesControler {
                 .whereLike("dishes.name", `%${name}%`)
                 .whereIn("ingredients.name", filterIngredients)
                 .innerJoin("dishes", "dishes.id", "ingredients.dish_id")
-                .orderBy("dishes.name");
+                .groupBy("dishes.id")
         } else if(name) {
              dishes = await knex("dishes")
                 .where({ user_id })
                 .whereLike("name", `%${name}%`)
-                .orderBy("name");
         } else {
             dishes = await knex("dishes")
                 .where({ user_id })
-                .orderBy("name");
         }
 
         const userIngredients = await knex("ingredients").where({ user_id });

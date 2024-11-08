@@ -33,7 +33,7 @@ class DishesControler {
 
         const dish = await knex("dishes").where({ id }).first();
 
-        const ingredients = await knex("ingredients").where({ dish_id: id }).orderBy("name");
+        const ingredients = await knex("ingredients").where({ dish_id: id });
 
         return response.json({
             ...dish,
@@ -90,6 +90,63 @@ class DishesControler {
 
         return response.json(dishesWithIngredients);
     }
+
+    async update(request, response) {
+        const user_id = request.user.id
+        const { id } = request.params
+
+        const { name, category, ingredients, price, description, image } = request.body
+    
+        const dish = await knex("dishes").where({ id }).first()
+    
+        if (!dish) {
+          throw new AppError("Prato não encontrado", 401);
+        }
+    
+        const dishIngredients = await knex("ingredients")
+          .where({ dish_id: id })
+          .orderBy("name")
+    
+        if (!dishIngredients) {
+          throw new AppError("Ingredientes não encontrados", 401)
+        }
+    
+        dish.name = name ?? dish.name
+        dish.category = category ?? dish.category
+        dish.price = price ?? dish.price
+        dish.description = description ?? dish.description
+        dish.image = image ?? dish.image
+    
+        await knex("dishes")
+          .update({
+            name: dish.name,
+            description: dish.description,
+            price: dish.price,
+            category: dish.category,
+            image: dish.image,
+            updated_at: knex.raw(
+              "strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')"
+            ),
+          })
+          .where({ id });
+    
+        await knex("ingredients").where({ dish_id: id }).delete();
+    
+        const ingredientsInsert = ingredients.map((ingredient) => {
+          return {
+            dish_id: id,
+            user_id,
+            name: ingredient.name,
+          }
+        });
+    
+        await knex("ingredients").insert(ingredientsInsert)
+    
+        response.json({
+          message: "Prato atualizado com sucesso",
+        });
+      }
 }
+    
 
 module.exports = DishesControler;
